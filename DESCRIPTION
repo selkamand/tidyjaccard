@@ -16,3 +16,5 @@ Imports:
     assertions,
     purrr,
     utils
+URL: https://github.com/selkamand/tidyjaccard
+BugReports: https://github.com/selkamand/tidyjaccard/issues
