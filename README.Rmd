@@ -18,6 +18,8 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN status](https://www.r-pkg.org/badges/version/tidyjaccard)](https://CRAN.R-project.org/package=tidyjaccard)
+[![Codecov test coverage](https://codecov.io/gh/selkamand/tidyjaccard/branch/master/graph/badge.svg)](https://app.codecov.io/gh/selkamand/tidyjaccard?branch=master)
+[![R-CMD-check](https://github.com/selkamand/tidyjaccard/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/selkamand/tidyjaccard/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Effortless all vs all jaccard similarity from tidy dataframes.
@@ -69,5 +71,5 @@ Now lets compute similarity between each person by their traits
 library(tidyjaccard)
 
 df_family |>
-  tidy_pairwise_jaccard_similarity()
+  tidy_pairwise_jaccard_similarity(col_sample = "name", col_trait = "trait")
 ```
