@@ -41,7 +41,7 @@ remotes::install_github('selkamand/tidyjaccard')
 ## Getting Started
 
 Here’s an example
-(dataset)\[<https://github.com/selkamand/tidyjaccard/blob/master/inst/smith_and_johnson.csv>\]
+[dataset](https://github.com/selkamand/tidyjaccard/blob/master/inst/smith_and_johnson.csv)
 describing physical traits of two families
 
 Family 1: Smith (5 members) Family 2: Johnson (3 members)
