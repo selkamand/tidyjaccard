@@ -50,8 +50,9 @@ remotes::install_github('selkamand/tidyjaccard')
 
 Here's an example [dataset](https://github.com/selkamand/tidyjaccard/blob/master/inst/smith_and_johnson.csv) describing physical traits of two families
 
-Family 1: Smith (5 members)
-Family 2: Johnson (3 members)
+- Family 1: Smith (5 members)
+
+- Family 2: Johnson (3 members)
 
 *Research Question:* Which people in the dataset are most physically similar to one another? Do they tend to come from the same family?
 
@@ -81,12 +82,12 @@ df_family |>
 
 RNAseq data
 
-. col_sample = sample identifier
-. col_trait = over_expressed_genes
+- col_sample = sample identifier
+- col_trait = over_expressed_genes
 
 
 Microbiome data
 
-. col_sample = sample identifier
-. col_trait = microbes present
+- col_sample = sample identifier
+- col_trait = microbes present
 
