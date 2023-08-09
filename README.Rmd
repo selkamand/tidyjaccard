@@ -1,0 +1,73 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# TidyJaccard
+
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![CRAN status](https://www.r-pkg.org/badges/version/tidyjaccard)](https://CRAN.R-project.org/package=tidyjaccard)
+<!-- badges: end -->
+
+Effortless all vs all jaccard similarity from tidy dataframes.
+
+## Philosophy
+
+For TidyJaccard to work seamlessly, ensure that your dataframe includes two columns:
+
+1. **sample_identifier**: This column should contain unique identifiers for each sample in your dataset.
+
+2. **feature**: Each row in this column defines an element within the set corresponding to the respective sample identifier. This column plays a pivotal role in calculating Jaccard similarity.
+
+Specific columns don't matter
+
+
+
+## Installation
+
+You can install the development version of tidyjaccard like so:
+
+``` r
+remotes::install_github('selkamand/tidyjaccard')
+```
+
+
+## Getting Started
+
+Let's walk through a toy example using a dataset describing physical traits of members of two different families:
+
+Family 1: Smith (5 members)
+Family 2: Johnson (3 members)
+
+For each member of the family, we've recorded a bunch of physical traits. Each row in our dataset describes one trait present in one individual.
+
+Lets look at the data:
+
+```{r}
+# Read data
+path_data <- system.file(package='tidyjaccard', 'smith_and_johnson.csv')
+df_family <- read.csv(path_data)
+
+# Print data
+head(df_family)
+```
+
+Now lets compute similarity between each person by their traits
+
+```{r example}
+library(tidyjaccard)
+
+df_family |>
+  tidy_pairwise_jaccard_similarity()
+```

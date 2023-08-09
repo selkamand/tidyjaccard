@@ -1,0 +1,18 @@
+Package: tidyjaccard
+Title: Effortlessly Compute Pairwise Jaccard Similarity from Tidy Datasets
+Version: 0.0.0.9000
+Authors@R: 
+    person("Sam", "El-Kamand", , "sam.elkamand@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-2270-8088"))
+Description: Provides an intuitive way to compute pairwise Jaccard similarity from tidy datasets. Given a dataframe with unique sample identifiers and sets of elements per sample, this package calculates Jaccard similarity and returns the mapping in a tidy dataframe.
+License: MIT + file LICENSE
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Imports: 
+    assertions,
+    purrr,
+    utils
