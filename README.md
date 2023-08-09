@@ -7,14 +7,14 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![R-CMD-check](https://github.com/selkamand/tidyjaccard/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/selkamand/tidyjaccard/actions/workflows/R-CMD-check.yaml)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/tidyjaccard)](https://CRAN.R-project.org/package=tidyjaccard)
 [![Codecov test
 coverage](https://codecov.io/gh/selkamand/tidyjaccard/branch/master/graph/badge.svg)](https://app.codecov.io/gh/selkamand/tidyjaccard?branch=master)
-[![R-CMD-check](https://github.com/selkamand/tidyjaccard/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/selkamand/tidyjaccard/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-Effortless all vs all jaccard similarity from tidy dataframes.
+Effortless all vs all Jaccard similarity from tidy dataframes.
 
 ## Philosophy
 
@@ -24,11 +24,11 @@ two columns:
 1.  **sample_identifier**: This column should contain unique identifiers
     for each sample in your dataset.
 
-2.  **feature**: Each row in this column defines an element within the
-    set corresponding to the respective sample identifier. This column
-    plays a pivotal role in calculating Jaccard similarity.
+2.  **set**: Each row in this column defines an element within the set
+    corresponding to the respective sample identifier. This column plays
+    a pivotal role in calculating Jaccard similarity.
 
-Specific columns don’t matter
+Names of columns doesn’t matter.
 
 ## Installation
 
@@ -40,14 +40,17 @@ remotes::install_github('selkamand/tidyjaccard')
 
 ## Getting Started
 
-Let’s walk through a toy example using a dataset describing physical
-traits of members of two different families:
+Here’s an example
+(dataset)\[<https://github.com/selkamand/tidyjaccard/blob/master/inst/smith_and_johnson.csv>\]
+describing physical traits of two families
 
 Family 1: Smith (5 members) Family 2: Johnson (3 members)
 
-For each member of the family, we’ve recorded a bunch of physical
-traits. Each row in our dataset describes one trait present in one
-individual.
+*Research Question:* Which people in the dataset are most physically
+similar to one another? Do they tend to come from the same family?
+
+For each member of the family, we’ve recorded physical traits. Each row
+in our dataset describes one trait present in one individual.
 
 Lets look at the data:
 
@@ -104,3 +107,13 @@ df_family |>
 #> 27  Mia Johnson Olivia Johnson 0.37500000        8
 #> 28 Liam Johnson Olivia Johnson 0.62500000        8
 ```
+
+## Other Applications
+
+RNAseq data
+
+. col_sample = sample identifier . col_trait = over_expressed_genes
+
+Microbiome data
+
+. col_sample = sample identifier . col_trait = microbes present
