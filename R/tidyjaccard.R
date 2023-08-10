@@ -12,7 +12,7 @@
 #'        when generating pairwise combinations using \code{\link{tidy_pairwise_sample_combinations}}.
 #'        Default is \code{TRUE}.
 #'
-#' @return A dataframe with pairwise combinations of samples, Jaccard similarity, and set size.
+#' @return A dataframe describing Jaccard similarity of each pairwise combination of samples, as well as total set size (tidy_pairwise_simdist)
 #'
 #' @importFrom assertions assert_dataframe assert_string assert_names_include
 #' @importFrom purrr map2 list_rbind
@@ -33,6 +33,8 @@ tidy_pairwise_jaccard_similarity <- function(data, col_sample, col_trait, includ
   assertions::assert_string(col_trait)
   assertions::assert_names_include(data, names = col_sample)
   assertions::assert_names_include(data, names = col_trait)
+  assertions::assert_no_missing(data[col_sample])
+  assertions::assert_no_missing(data[col_trait])
 
   # Get unique samples (deduplication and unused levels handled by tidy_pairwise_sample_combinations)
   samples = data[[col_sample]]

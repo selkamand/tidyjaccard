@@ -98,3 +98,113 @@ tidy_pairwise_sample_combinations <- function(samples, prefix = "sample", includ
   return(df_combinations)
 }
 
+
+
+#' Convert Tidy Data to Dissimilarity Matrix
+#'
+#' This function takes tidy data representing pairwise similarities or distances and converts it
+#' into a dissimilarity matrix. The input tidy data is expected to have at least
+#' three columns representing subject identifiers and their pairwise similarity or distance values.
+#' The resulting dissimilarity matrix will have subjects as row and column names,
+#' and the dissimilarity values will be populated accordingly.
+#'
+#' @param data A dataframe containing pairwise similarity or distance data.
+#'
+#' @return A dissimilarity matrix with subjects as row and column names,
+#'         and dissimilarity values populated.
+#'
+#' @importFrom assertions assert_dataframe assert_numeric
+#'
+#' @examples
+#' # Create a tidy dataframe with pairwise similarities
+#' tidy_data <- data.frame(subject1 = c("A", "A", "B"),
+#'                         subject2 = c("B", "C", "C"),
+#'                         value = c(0.2, 0.5, 0.8))
+#'
+#' # Convert tidy data to dissimilarity matrix
+#' dissimilarity_matrix <- tidy_to_matrix(tidy_data)
+#'
+#' @export
+tidy_to_matrix <- function(data) {
+
+  # Assertions
+  assert_valid_tidy_pairwise_simdist(data)
+
+  unique_names <- sort(union(data[[1]], data[[2]]))
+  num_names <- length(unique_names)
+
+  matrix <- matrix(0, nrow = num_names, ncol = num_names, dimnames = list(unique_names, unique_names))
+
+  for (i in 1:nrow(data)) {
+    row_name <- data[[1]][i]
+    col_name <- data[[2]][i]
+    value <- data[[3]][i]
+
+    matrix[row_name, col_name] <- value
+    matrix[col_name, row_name] <- value
+  }
+
+  return(matrix)
+}
+
+
+tidy_toggle_simdist <- function(){
+
+}
+
+#' Convert Similarity Matrix to Distance Matrix and Vice Versa
+#'
+#' This function takes a matrix representing either a similarity or a distance matrix
+#' and converts it to its counterpart. For similarity matrices, it subtracts each value
+#' from 1 to obtain a distance matrix. For distance matrices, it performs the reverse
+#' operation to obtain a similarity matrix.
+#'
+#' @param matrix A numeric matrix representing either a similarity or a distance matrix.
+#'
+#' @return A matrix of the same dimensions as the input matrix, converted to the opposite type.
+#'
+#' @importFrom assertions assert_matrix
+#'
+#' @examples
+#' # Create a similarity matrix
+#' sim_matrix <- matrix(c(1.0, 0.8, 0.5, 0.8, 1.0, 0.6, 0.5, 0.6, 1.0), nrow = 3)
+#'
+#' # Convert similarity matrix to distance matrix
+#' dist_matrix <- matrix_toggle_simdist(sim_matrix)
+#'
+#' @export
+matrix_toggle_simdist <- function(matrix) {
+  assertions::assert_matrix(matrix)
+
+  converted_matrix <- 1 - matrix
+  return(converted_matrix)
+}
+
+#' Assert Input is a valid of tidy pairwise similarity/dissimilarity data.frame
+#'
+#' This function checks the validity of a dataframe representing pairwise similarity or
+#' dissimilarity data in a tidy format. It ensures that the input dataframe has at least
+#' three columns representing subject identifiers and their pairwise similarity or distance values.
+#' Additionally, it checks that all required columns have non-missing numeric values.
+#'
+#' @param data A dataframe containing pairwise similarity or dissimilarity data.
+#'
+#' @importFrom assertions assert_dataframe assert_greater_than_or_equal_to assert_numeric assert_no_missing
+#'
+#' @examples
+#' # Create a tidy pairwise simdist dataframe
+#' tidy_simdist_data <- tidy_pairwise_jaccard_similarity(my_data)
+#'
+#' # Check the validity of the tidy pairwise simdist dataframe
+#' assert_valid_tidy_pairwise_simdist(tidy_simdist_data)
+#'
+#' @seealso \code{\link{tidy_pairwise_jaccard_similarity}}
+#'
+#' @export
+assert_valid_tidy_pairwise_simdist <- function(data){
+  assertions::assert_dataframe(data)
+  assertions::assert_dataframe(data)
+  assertions::assert_greater_than_or_equal_to(ncol(data), minimum = 3)
+  assertions::assert_numeric(data[[3]])
+  assertions::assert_no_missing(data[1:3])
+}

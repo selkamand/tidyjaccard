@@ -23,7 +23,7 @@ when generating pairwise combinations using \code{\link{tidy_pairwise_sample_com
 Default is \code{TRUE}.}
 }
 \value{
-A dataframe with pairwise combinations of samples, Jaccard similarity, and set size.
+A dataframe describing Jaccard similarity of each pairwise combination of samples, as well as total set size (tidy_pairwise_simdist)
 }
 \description{
 This function calculates the Jaccard similarity between pairs of samples in a dataframe,
