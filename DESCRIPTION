@@ -7,6 +7,7 @@ Authors@R:
 Description: Provides an intuitive way to compute pairwise Jaccard similarity from tidy datasets. Given a dataframe with unique sample identifiers and sets of elements per sample, this package calculates Jaccard similarity and returns the mapping in a tidy dataframe.
 License: MIT + file LICENSE
 Suggests: 
+    covr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Encoding: UTF-8
