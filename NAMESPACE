@@ -2,8 +2,11 @@
 
 export(assert_valid_tidy_pairwise_simdist)
 export(jaccard)
+export(matrix_to_dist_class)
 export(matrix_toggle_simdist)
 export(tidy_pairwise_jaccard_similarity)
 export(tidy_pairwise_sample_combinations)
 export(tidy_to_matrix)
 export(tidy_toggle_simdist)
+importFrom(assertions,assert_matrix)
+importFrom(stats,as.dist)

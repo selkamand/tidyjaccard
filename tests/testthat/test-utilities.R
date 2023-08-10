@@ -134,6 +134,7 @@ test_that("Tidy sim/dist data is correctly converted to a matrix", {
 
   # Convert tidy data to a matrix
   result_matrix <- tidy_to_matrix(tidy_data)
+  result_matrix_distclass <- matrix_to_dist_class(result_matrix)
 
   # Check the expected values in the resulting matrix
   expect_equal(result_matrix["A", "B"], 0.2)
@@ -142,6 +143,10 @@ test_that("Tidy sim/dist data is correctly converted to a matrix", {
   expect_equal(result_matrix["C", "A"], 0.5)
   expect_equal(result_matrix["B", "C"], 0.8)
   expect_equal(result_matrix["C", "B"], 0.8)
+
+  expect_s3_class(result_matrix_distclass, "dist")
+  expect_equal(as.matrix(result_matrix_distclass), result_matrix)
+
 })
 
 # Matrix Inversion --------------------------------------------------------

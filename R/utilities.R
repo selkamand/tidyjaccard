@@ -108,7 +108,6 @@ tidy_pairwise_sample_combinations <- function(samples, prefix = "sample", includ
 #' and the dissimilarity values will be populated accordingly.
 #'
 #' @param data A dataframe containing pairwise similarity or distance data.
-#'
 #' @return A dissimilarity matrix with subjects as row and column names,
 #'         and dissimilarity values populated.
 #'
@@ -179,6 +178,33 @@ tidy_toggle_simdist <- function(data){
   return(data)
 }
 
+#' Convert Matrix to 'dist' Class object
+#'
+#' NOT to be confused with [matrix_toggle_simdist()] which converts similarity matrices to distance matrices and vice versa.
+#'
+#' This function converts a matrix to a 'dist' class object using the \code{\link[stats]{as.dist}} function.
+#' This 'dist' class object can be fed into hclust and other functions
+#'
+#' @param matrix A numeric matrix.
+#'
+#' @return A distance class object.
+#'
+#' @importFrom stats as.dist
+#'
+#' @examples
+#' matrix <- matrix(c(1, 2, 3, 2, 0, 4, 3, 4, 0), ncol = 3)
+#' result <- matrix_to_dist_class(matrix)
+#'
+#' @seealso
+#' \code{\link[stats]{as.dist}}
+#'
+#' @importFrom assertions assert_matrix
+#'
+#' @export
+matrix_to_dist_class <- function(matrix){
+  assertions::assert_matrix(matrix)
+  return(as.dist(matrix))
+}
 
 #' Convert Similarity Matrix to Distance Matrix and Vice Versa
 #'
