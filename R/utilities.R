@@ -155,8 +155,14 @@ tidy_to_matrix <- function(data) {
 #'
 #'
 #' @examples
+#'
+#' # Define Dataset
+#' data <- data.frame(name = c("Harry", "Luna", "Oscar"),
+#'                    trait = c("tall", "short", "tall"))
+#'
 #' # Create a tidy pairwise simdist dataframe
-#' tidy_simdist_data <- tidy_pairwise_jaccard_similarity(my_data)
+#' tidy_simdist_data <- data |>
+#'   tidy_pairwise_jaccard_similarity(col_sample = "name", col_trait = "trait")
 #'
 #' # Toggle the values in the tidy pairwise simdist dataframe
 #' tidy_toggle_simdist(tidy_simdist_data)
@@ -211,8 +217,14 @@ matrix_toggle_simdist <- function(matrix) {
 #' @param data A dataframe containing pairwise similarity or dissimilarity data.
 #'
 #' @examples
+#'
+#' # Define Dataset
+#' data <- data.frame(name = c("Harry", "Luna", "Oscar"),
+#'                    trait = c("tall", "short", "tall"))
+#'
 #' # Create a tidy pairwise simdist dataframe
-#' tidy_simdist_data <- tidy_pairwise_jaccard_similarity(my_data)
+#' tidy_simdist_data <- data |>
+#'     tidy_pairwise_jaccard_similarity(col_sample = "name", col_trait = "trait")
 #'
 #' # Check the validity of the tidy pairwise simdist dataframe
 #' assert_valid_tidy_pairwise_simdist(tidy_simdist_data)
