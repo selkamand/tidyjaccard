@@ -56,7 +56,6 @@ jaccard <- function(a, b) {
 #' samples <- c("A", "B", "C")
 #' tidy_pairwise_sample_combinations(samples)
 #'
-#' @importFrom utils combn
 #'
 #' @export
 #'
@@ -113,7 +112,6 @@ tidy_pairwise_sample_combinations <- function(samples, prefix = "sample", includ
 #' @return A dissimilarity matrix with subjects as row and column names,
 #'         and dissimilarity values populated.
 #'
-#' @importFrom assertions assert_dataframe assert_numeric
 #'
 #' @examples
 #' # Create a tidy dataframe with pairwise similarities
@@ -148,9 +146,33 @@ tidy_to_matrix <- function(data) {
 }
 
 
-tidy_toggle_simdist <- function(){
+#' Toggle Between Tidy Pairwise Similarity and Dissimilarity Dataframes
+#'
+#' This function takes the output of [tidy_pairwise_jaccard_similarity()] and similar
+#' and toggles the values to convert between similarity and dissimilarity representations.
+#'
+#' @param data A dataframe containing pairwise similarity or dissimilarity data.
+#'
+#'
+#' @examples
+#' # Create a tidy pairwise simdist dataframe
+#' tidy_simdist_data <- tidy_pairwise_jaccard_similarity(my_data)
+#'
+#' # Toggle the values in the tidy pairwise simdist dataframe
+#' tidy_toggle_simdist(tidy_simdist_data)
+#'
+#' @seealso \code{\link{assert_valid_tidy_pairwise_simdist}}
+#'
+#' @export
+tidy_toggle_simdist <- function(data){
+  # Assertions
+  assert_valid_tidy_pairwise_simdist(data)
 
+  data[3] <- 1 - data[[3]]
+
+  return(data)
 }
+
 
 #' Convert Similarity Matrix to Distance Matrix and Vice Versa
 #'
@@ -163,7 +185,6 @@ tidy_toggle_simdist <- function(){
 #'
 #' @return A matrix of the same dimensions as the input matrix, converted to the opposite type.
 #'
-#' @importFrom assertions assert_matrix
 #'
 #' @examples
 #' # Create a similarity matrix
@@ -188,8 +209,6 @@ matrix_toggle_simdist <- function(matrix) {
 #' Additionally, it checks that all required columns have non-missing numeric values.
 #'
 #' @param data A dataframe containing pairwise similarity or dissimilarity data.
-#'
-#' @importFrom assertions assert_dataframe assert_greater_than_or_equal_to assert_numeric assert_no_missing
 #'
 #' @examples
 #' # Create a tidy pairwise simdist dataframe

@@ -101,6 +101,29 @@ test_that("tidy_pairwise_sample_combinations function works with unused levels",
 })
 
 
+
+# Tidy SimDist Inversion --------------------------------------------------
+
+test_that("Values in tidy pairwise simdist dataframe are toggled correctly", {
+
+  # Define a sample tidy pairwise simdist dataframe
+  sample_data <- data.frame(subject1 = c("A", "A", "B"),
+                            subject2 = c("B", "C", "C"),
+                            value = c(0.2, 0.5, 0.8))
+
+
+  # Create a copy of the sample data
+  original_data <- sample_data
+
+  # Toggle the values in the dataframe
+  df_result <- tidy_toggle_simdist(sample_data)
+
+  # Check if the values are toggled correctly
+  expect_equal(df_result$value[1], 0.8)
+  expect_equal(df_result$value[2], 0.5)
+  expect_equal(df_result$value[3], 0.2)
+})
+
 # Tidy to Matrix ----------------------------------------------------------
 
 test_that("Tidy sim/dist data is correctly converted to a matrix", {

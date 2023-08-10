@@ -30,6 +30,7 @@ pairwise combination of samples.
 samples <- c("A", "B", "C")
 tidy_pairwise_sample_combinations(samples)
 
+
 }
 \seealso{
 \href{https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/combn}{combn function documentation}

@@ -14,8 +14,6 @@
 #'
 #' @return A dataframe describing Jaccard similarity of each pairwise combination of samples, as well as total set size (tidy_pairwise_simdist)
 #'
-#' @importFrom assertions assert_dataframe assert_string assert_names_include
-#' @importFrom purrr map2 list_rbind
 #'
 #' @examples
 #' data <- data.frame(name = c("Harry", "Luna", "Oscar"),
