@@ -206,6 +206,7 @@ matrix_to_dist_class <- function(matrix){
   return(as.dist(matrix))
 }
 
+
 #' Convert Similarity Matrix to Distance Matrix and Vice Versa
 #'
 #' This function takes a matrix representing either a similarity or a distance matrix

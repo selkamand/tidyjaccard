@@ -7,8 +7,14 @@ Authors@R:
 Description: Provides an intuitive way to compute pairwise Jaccard similarity from tidy datasets. Given a dataframe with unique sample identifiers and sets of elements per sample, this package calculates Jaccard similarity and returns the mapping in a tidy dataframe.
 License: MIT + file LICENSE
 Suggests: 
+    ape,
     covr,
-    testthat (>= 3.0.0)
+    dplyr,
+    ggiraph,
+    ggplot2,
+    ggraph,
+    testthat (>= 3.0.0),
+    tidygraph
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -19,3 +25,6 @@ Imports:
     utils
 URL: https://github.com/selkamand/tidyjaccard
 BugReports: https://github.com/selkamand/tidyjaccard/issues
+Depends: 
+    R (>= 2.10)
+LazyData: true

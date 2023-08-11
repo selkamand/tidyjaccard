@@ -74,14 +74,52 @@ Now lets compute similarity between each person by their traits
 ```{R Example}
 library(tidyjaccard)
 
+nodePar <- list(lab.cex = 0.6, pch = c(NA, 19), 
+                cex = 0.7, col = "blue")
+
 df_family |>
-  tidy_pairwise_jaccard_similarity(col_sample = "name", col_trait = "trait") |>
-  tidy_toggle_simdist() |>
-  tidy_to_matrix() |>
-  as.dist() |>
-  hclust() |>
-  plot()
+  tidy_pairwise_jaccard_similarity(col_sample = "name", col_trait = "trait") |> # Compute Jaccard Similarity
+  tidy_toggle_simdist() |> # Convert similarity to distance
+  tidy_to_matrix() |> # Convert to matrix
+  matrix_to_dist_class() |> # Convert matrix to 'dist' class (for compatibility with hclust)
+  hclust(method = "single") |> # Do heirarchical clustering
+  as.dendrogram() |>
+  set("branches_k_color", k = 2) |>
+  #plot(xlab = "average", horiz = TRUE) # Plot result
+  plot(xlab = "Distance", horiz = TRUE, type = "rectangle", nodePar = nodePar) 
+  # Plot result 
+
+df_family |>
+  tidy_pairwise_jaccard_similarity(col_sample = "name", col_trait = "trait") |> # Compute Jaccard Similarity
+  tidy_toggle_simdist() |> # Convert similarity to distance
+  tidy_to_matrix() |> # Convert to matrix
+  matrix_to_dist_class() |> # Convert matrix to 'dist' class (for compatibility with hclust)
+  hclust(method = "single") |> # Do heirarchical clustering
+  ape::as.phylo() |> 
+  #plot(xlab = "average", horiz = TRUE) # Plot result
+  plot(type = "fan", cex = 0.6, no.margin = TRUE)
+
+
+#Write your tree to a newick file:
+  
+df_family |>
+  tidy_pairwise_jaccard_similarity(col_sample = "name", col_trait = "trait") |> # Compute Jaccard Similarity
+  tidy_toggle_simdist() |> # Convert similarity to distance
+  tidy_to_matrix() |> # Convert to matrix
+  matrix_to_dist_class() |> # Convert matrix to 'dist' class (for compatibility with hclust)
+  hclust(method = "single") |> # Do heirarchical clustering
+
+df_family |>
+  tidy_pairwise_jaccard_similarity(col_sample = "name", col_trait = "trait") |> # Compute Jaccard Similarity
+  tidy_toggle_simdist() |> # Convert similarity to distance
+  tidy_to_matrix() |> # Convert to matrix
+  matrix_to_dist_class() |> # Convert matrix to 'dist' class (for compatibility with hclust)
+  hclust(method = "single") |> # Do heirarchical clustering
+  as.dendrogram() |>
+  dendogram_ggraph()
 ```
+
+
 
 ## Other Applications
 
