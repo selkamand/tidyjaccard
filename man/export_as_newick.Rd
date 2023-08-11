@@ -22,6 +22,7 @@ This function converts an hclust object to the Newick format and exports it to a
 }
 \examples{
 \dontrun{
+family
 export_as_newick(my_hclust, "output_tree", overwrite = TRUE)
 }
 

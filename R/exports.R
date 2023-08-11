@@ -13,6 +13,7 @@
 #'
 #' @examples
 #' \dontrun{
+#' family
 #' export_as_newick(my_hclust, "output_tree", overwrite = TRUE)
 #' }
 #'

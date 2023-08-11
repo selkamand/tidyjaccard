@@ -61,76 +61,99 @@ For each member of the family, we've recorded physical traits. Each row in our d
 Lets look at the data:
 
 ```{r}
-# Read data
-path_data <- system.file(package='tidyjaccard', 'smith_and_johnson.csv')
-df_family <- read.csv(path_data)
-
-# Print data
-head(df_family)
-```
-
-Now lets compute similarity between each person by their traits
-
-```{R Example}
 library(tidyjaccard)
 
-nodePar <- list(lab.cex = 0.6, pch = c(NA, 19), 
-                cex = 0.7, col = "blue")
+# Inbuilt Dataset Describing Smith and Johnson family members
+head(family)
+```
 
-df_family |>
-  tidy_pairwise_jaccard_similarity(col_sample = "name", col_trait = "trait") |> # Compute Jaccard Similarity
-  tidy_toggle_simdist() |> # Convert similarity to distance
-  tidy_to_matrix() |> # Convert to matrix
-  matrix_to_dist_class() |> # Convert matrix to 'dist' class (for compatibility with hclust)
-  hclust(method = "single") |> # Do heirarchical clustering
-  as.dendrogram() |>
-  set("branches_k_color", k = 2) |>
-  #plot(xlab = "average", horiz = TRUE) # Plot result
-  plot(xlab = "Distance", horiz = TRUE, type = "rectangle", nodePar = nodePar) 
-  # Plot result 
+### Compute Jaccard Similarity
 
-df_family |>
-  tidy_pairwise_jaccard_similarity(col_sample = "name", col_trait = "trait") |> # Compute Jaccard Similarity
-  tidy_toggle_simdist() |> # Convert similarity to distance
-  tidy_to_matrix() |> # Convert to matrix
-  matrix_to_dist_class() |> # Convert matrix to 'dist' class (for compatibility with hclust)
-  hclust(method = "single") |> # Do heirarchical clustering
-  ape::as.phylo() |> 
-  #plot(xlab = "average", horiz = TRUE) # Plot result
-  plot(type = "fan", cex = 0.6, no.margin = TRUE)
-
-
-#Write your tree to a newick file:
-  
-df_family |>
-  tidy_pairwise_jaccard_similarity(col_sample = "name", col_trait = "trait") |> # Compute Jaccard Similarity
-  tidy_toggle_simdist() |> # Convert similarity to distance
-  tidy_to_matrix() |> # Convert to matrix
-  matrix_to_dist_class() |> # Convert matrix to 'dist' class (for compatibility with hclust)
-  hclust(method = "single") |> # Do heirarchical clustering
-
-df_family |>
-  tidy_pairwise_jaccard_similarity(col_sample = "name", col_trait = "trait") |> # Compute Jaccard Similarity
-  tidy_toggle_simdist() |> # Convert similarity to distance
-  tidy_to_matrix() |> # Convert to matrix
-  matrix_to_dist_class() |> # Convert matrix to 'dist' class (for compatibility with hclust)
-  hclust(method = "single") |> # Do heirarchical clustering
-  as.dendrogram() |>
-  dendogram_ggraph()
+```{r}
+# Compute similarity
+family |>
+  tidy_pairwise_jaccard_similarity(col_sample = "name", col_trait = "trait") # Compute Jaccard Similarity
 ```
 
 
+### Convert to distance matrix
 
-## Other Applications
+We can convert the tidy similarity to a distance matrix for use with many functions
+
+```{r}
+family |>
+  tidy_pairwise_jaccard_similarity(col_sample = "name", col_trait = "trait") |> # Compute Jaccard Similarity
+  tidy_toggle_simdist() |> # Convert similarity to distance
+  tidy_to_matrix() |> # Convert to matrix
+  matrix_to_dist_class() # Convert matrix to 'dist' class (for compatibility with hclust)
+```
+
+### Heirarchical Clustering and Visualisation
+
+Heirarchical clustering is as simple as running `hclust()` on the distance matrix. Then just pipe to `visualise_dendogram_ggraph()` to visualise the relationships
+
+```{r}
+family |>
+  tidy_pairwise_jaccard_similarity(col_sample = "name", col_trait = "trait") |> # Compute Jaccard Similarity
+  tidy_toggle_simdist() |> # Convert similarity to distance
+  tidy_to_matrix() |> # Convert to matrix
+  matrix_to_dist_class() |> # Convert matrix to 'dist' class (for compatibility with hclust)
+  hclust(method = "complete") |> # Do heirarchical clustering
+  visualise_dendrogram_ggraph(draw_labels = TRUE) # Visualise the dendrogram
+```
+
+
+###  Customising Visualisation
+
+
+Finally lets map some metadata about each family member to different visual properties. 
+
+Requirements: a dataframe with 1 row per leaf node. The first column will be our describe the label of each leaf node (e.g. Mia Johnson, Liam Johnson etc). This dataframe should also include columns we can map to colour, shape, and tooltips / data_ids for when we make the plot interactive.
+
+TidyJaccard come pre-packaged with an example dataset `family_member_annotations`
+
+```{r}
+print(family_member_annotations) # leaf node annotation dataset
+```
+
+
+```{r}
+gg_dendogram <- family |>
+  tidy_pairwise_jaccard_similarity(col_sample = "name", col_trait = "trait") |> # Compute Jaccard Similarity
+  tidy_toggle_simdist() |> # Convert similarity to distance
+  tidy_to_matrix() |> # Convert to matrix
+  matrix_to_dist_class() |> # Convert matrix to 'dist' class (for compatibility with hclust)
+  hclust(method = "complete") |> # Do heirarchical clustering
+  visualise_dendrogram_ggraph( # Visualise the dendrogram
+    annotations = family_member_annotations, # Dataframe with 1 row per labelled node
+    col_label = name, 
+    col_colour = family, 
+    col_shape = family,
+    col_tooltip = tooltip,
+    col_data_id = family
+    ) 
+
+gg_dendogram
+```
+
+### Adding Interactivity 
+
+Make the dendrogram interactive using `visualisation_make_interactive()`
+
+```{r}
+visualisation_make_interactive(gg_dendogram)
+```
+
+
+## Examples of Other Applications
 
 RNAseq data
 
 - col_sample = sample identifier
-- col_trait = over_expressed_genes
+- col_trait = overexpressed genes
 
 
 Microbiome data
 
 - col_sample = sample identifier
 - col_trait = microbes present
-
