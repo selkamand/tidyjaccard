@@ -18,7 +18,7 @@
 #'
 #' @export
 #' @importFrom rlang .data
-visualise_dendrogram_ggraph <- function(hclust, annotations = NULL, col_label = NULL, col_sample = NULL, col_colour = NULL, col_shape = NULL, col_tooltip = NULL, col_data_id = NULL, circular = FALSE, label_leaf_only = FALSE, draw_labels = FALSE, padding_bottom = 0.6){
+visualise_dendrogram_ggraph <- function(hclust, annotations = NULL, col_label = NULL, col_sample = NULL, col_colour = NULL, col_shape = NULL, col_tooltip = NULL, col_data_id = NULL, col_classification = NULL, circular = FALSE, label_leaf_only = FALSE, draw_labels = FALSE, padding_bottom = 0.6, legend_position = "bottom", leaf_node_size = 1 ){
 
   # Namespace Checks
   requireNamespace("ggraph", quietly = TRUE)
@@ -66,6 +66,7 @@ visualise_dendrogram_ggraph <- function(hclust, annotations = NULL, col_label = 
     if(is.null(col_sample)){
       col_sample = colnames(annotations)[1]
     }
+
   }
 
   max_label_nchar = tbl_graph |>
@@ -94,7 +95,7 @@ visualise_dendrogram_ggraph <- function(hclust, annotations = NULL, col_label = 
         tooltip = if(!is.null( {{col_tooltip}} )) {{ col_tooltip }} else paste0(.data[["label"]], '<br>', .data[["node_id"]]),
         data_id = if(!is.null( {{col_data_id }} )) {{ col_data_id }} else .data[["node_id"]],
         shape = {{ col_shape }}
-      ), size = 5) +
+      ), size = leaf_node_size) +
     ggplot2::scale_y_continuous(expand = expansion) +
     ggplot2::theme_void() +
     ggplot2::scale_shape(solid = TRUE)
@@ -107,7 +108,7 @@ visualise_dendrogram_ggraph <- function(hclust, annotations = NULL, col_label = 
         x = .data[["x"]], y = .data[["y"]],
         tooltip =  paste0(.data[["node_id"]], "<br>Children: ", .data[["members"]]),
         data_id = .data[["node_id"]]
-      ), size = 3)
+      ), size = 0.2)
   }
 
   # Draw Leaf labels
@@ -115,6 +116,14 @@ visualise_dendrogram_ggraph <- function(hclust, annotations = NULL, col_label = 
     gg <- gg + ggraph::geom_node_text(check_overlap = FALSE, ggplot2::aes(label = .data[["label"]]), hjust = 1, angle = 90, nudge_y = label_nudge_y, size = text_size)
   }
 
+  # Fix Coord system if circular
+  if(circular){
+   gg <- gg + ggplot2::coord_fixed()
+  }
+
+  # Determine legend position
+
+  gg <- gg + ggplot2::theme(legend.position = legend_position)
 
   return(gg)
 }

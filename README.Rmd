@@ -108,7 +108,7 @@ family |>
 
 Finally lets map some metadata about each family member to different visual properties. 
 
-Requirements: a dataframe with 1 row per leaf node. The first column will be our describe the label of each leaf node (e.g. Mia Johnson, Liam Johnson etc). This dataframe should also include columns we can map to colour, shape, and tooltips / data_ids for when we make the plot interactive.
+Requirements: a dataframe with 1 row per leaf node. The first column will be our describe the label of each leaf node (e.g. Mia Johnson, Liam Johnson etc). This dataframe should also include columns we can map to colour, shape, and tooltips (for when we make the plot interactive).
 
 TidyJaccard come pre-packaged with an example dataset `family_member_annotations`
 
@@ -129,8 +129,7 @@ gg_dendogram <- family |>
     col_label = name, 
     col_colour = family, 
     col_shape = family,
-    col_tooltip = tooltip,
-    col_data_id = family
+    col_tooltip = tooltip
     ) 
 
 gg_dendogram
@@ -140,9 +139,10 @@ gg_dendogram
 
 Make the dendrogram interactive using `visualisation_make_interactive()`
 
-```{r}
+```{r, eval = FALSE}
 visualisation_make_interactive(gg_dendogram)
 ```
+
 
 
 ## Examples of Other Applications
