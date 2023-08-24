@@ -36,19 +36,14 @@ tidy_pairwise_jaccard_similarity <- function(data, col_sample, col_trait, includ
     assertions::assert_no_missing(data[col_sample])
     assertions::assert_no_missing(data[col_trait])
 
-
     # Get unique samples (deduplication and unused levels handled by tidy_pairwise_sample_combinations)
     samples = data[[col_sample]]
 
     # Generate Pairwise Dataframe (handles deduplication and unused factor levels)
-    df = tidy_pairwise_sample_combinations(samples, prefix = col_sample, include_unused_levels = include_unused_levels)
-
-    # Create names which will be used for the column
-    names1 = paste0(col_sample, "1")
-    names2 = paste0(col_sample, "2")
+    df_sample_pairs = tidy_pairwise_sample_combinations(samples, prefix = col_sample, include_unused_levels = include_unused_levels)
 
     # Compute Jaccard similarity
-    ls_jaccard <- furrr::future_map2(.x = df[[1]], .y = df[[2]],
+    ls_jaccard <- furrr::future_map2(.x = df_sample_pairs[[1]], .y = df_sample_pairs[[2]],
                               .f = function(s1, s2) {
                                 # Select traits for the given samples
                                 s1traits <- data[[col_trait]][s1 == data[[col_sample]]]
@@ -63,13 +58,12 @@ tidy_pairwise_jaccard_similarity <- function(data, col_sample, col_trait, includ
                               },
                               .progress = TRUE)
 
-    df_result <- do.call(rbind.data.frame, ls_jaccard)
-    data_cols <- colnames(df_result)
-    df_result[[names1]] <- df[[1]]
-    df_result[[names2]] <- df[[2]]
-    df_result <- df_result[, c(names1, names2, data_cols)]
+    # Collate Results
+    df_metrics <- do.call(rbind.data.frame, ls_jaccard)
+    df_final <- cbind(df_sample_pairs, df_metrics)
 
-    return(df_result)
+    # Return Result
+    return(df_final)
 
 }
 
