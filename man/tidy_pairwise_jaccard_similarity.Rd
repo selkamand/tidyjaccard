@@ -31,10 +31,15 @@ considering a specified trait column. The pairwise combinations of samples are g
 using the \code{\link{tidy_pairwise_sample_combinations}} function. Jaccard similarity
 is calculated for each pair based on the traits in the trait column.
 }
+\details{
+Optionally run using multiple cores using future
+}
 \examples{
+# Compute jaccard similarity using one core
 data <- data.frame(name = c("Harry", "Luna", "Oscar"),
                    trait = c("tall", "short", "tall"))
 result <- tidy_pairwise_jaccard_similarity(data, col_sample = "name", col_trait = "trait")
+#
 
 }
 \seealso{

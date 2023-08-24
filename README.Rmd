@@ -144,6 +144,24 @@ visualisation_make_interactive(gg_dendogram)
 ```
 
 
+### Working in Parallel
+
+If `tidy_pairwise_jaccard_similarity()` is too slow for your liking, get an easy speed up by using multiple threads.
+
+This functionality is powered by the `futureverse` 
+
+```{r}
+# Turn on multithreading
+library(future)
+threads = parallelly::availableCores(omit = 1) # How many threads to use. This will use all available cores except 1
+plan(multisession, workers = threads)
+
+# Compute jaccard similarity
+family |>
+  tidy_pairwise_jaccard_similarity(col_sample = "name", col_trait = "trait") # Compute Jaccard Similarity
+```
+
+
 
 ## Examples of Other Applications
 

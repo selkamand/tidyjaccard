@@ -13,10 +13,13 @@ visualise_dendrogram_ggraph(
   col_shape = NULL,
   col_tooltip = NULL,
   col_data_id = NULL,
+  col_classification = NULL,
   circular = FALSE,
   label_leaf_only = FALSE,
   draw_labels = FALSE,
-  padding_bottom = 0.6
+  padding_bottom = 0.6,
+  legend_position = "bottom",
+  leaf_node_size = 1
 )
 }
 \arguments{
@@ -36,6 +39,8 @@ visualise_dendrogram_ggraph(
 
 \item{col_data_id}{The name of the column in the annotations dataframe that contains data IDs.}
 
+\item{col_classification}{The name of the column in the annotations dataframe that contains classification information.}
+
 \item{circular}{A logical value indicating whether to create a circular dendrogram.}
 
 \item{label_leaf_only}{A logical value indicating whether to label only leaf nodes.}
@@ -43,6 +48,10 @@ visualise_dendrogram_ggraph(
 \item{draw_labels}{A logical value indicating whether to}
 
 \item{padding_bottom}{How much padding to add to the bottom of the plot (used to make space for text)}
+
+\item{legend_position}{Position of the legend in the plot.}
+
+\item{leaf_node_size}{Size of the leaf nodes in the plot.}
 }
 \value{
 A ggraph plot object.

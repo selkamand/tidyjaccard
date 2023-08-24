@@ -5,6 +5,8 @@
 #' using the \code{\link{tidy_pairwise_sample_combinations}} function. Jaccard similarity
 #' is calculated for each pair based on the traits in the trait column.
 #'
+#' Optionally run using multiple cores using future
+#'
 #' @param data A dataframe containing samples and traits.
 #' @param col_sample The column name representing the samples in the dataframe.
 #' @param col_trait The column name representing the traits in the dataframe.
@@ -14,50 +16,60 @@
 #'
 #' @return A dataframe describing Jaccard similarity of each pairwise combination of samples, as well as total set size (tidy_pairwise_simdist)
 #'
-#'
 #' @examples
+#' # Compute jaccard similarity using one core
 #' data <- data.frame(name = c("Harry", "Luna", "Oscar"),
 #'                    trait = c("tall", "short", "tall"))
 #' result <- tidy_pairwise_jaccard_similarity(data, col_sample = "name", col_trait = "trait")
+#' #
 #'
 #' @export
 #'
 #' @seealso \code{\link{tidy_pairwise_sample_combinations}}
-#'
 tidy_pairwise_jaccard_similarity <- function(data, col_sample, col_trait, include_unused_levels = TRUE) {
-  # Assertions
-  assertions::assert_dataframe(data)
-  assertions::assert_string(col_sample)
-  assertions::assert_string(col_trait)
-  assertions::assert_names_include(data, names = col_sample)
-  assertions::assert_names_include(data, names = col_trait)
-  assertions::assert_no_missing(data[col_sample])
-  assertions::assert_no_missing(data[col_trait])
+    # Assertions
+    assertions::assert_dataframe(data)
+    assertions::assert_string(col_sample)
+    assertions::assert_string(col_trait)
+    assertions::assert_names_include(data, names = col_sample)
+    assertions::assert_names_include(data, names = col_trait)
+    assertions::assert_no_missing(data[col_sample])
+    assertions::assert_no_missing(data[col_trait])
 
-  # Get unique samples (deduplication and unused levels handled by tidy_pairwise_sample_combinations)
-  samples = data[[col_sample]]
 
-  # Generate Pairwise Dataframe (handles deduplication and unused factor levels)
-  df = tidy_pairwise_sample_combinations(samples, prefix = col_sample, include_unused_levels = include_unused_levels)
+    # Get unique samples (deduplication and unused levels handled by tidy_pairwise_sample_combinations)
+    samples = data[[col_sample]]
 
-  # Compute Jaccard similarity
-  ls_jaccard <- purrr::map2(.x = df[[1]], .y = df[[2]],
-                            .f = function(s1, s2) {
-                              # Select traits for the given samples
-                              s1traits <- data[[col_trait]][s1 == data[[col_sample]]]
-                              s2traits <- data[[col_trait]][s2 == data[[col_sample]]]
+    # Generate Pairwise Dataframe (handles deduplication and unused factor levels)
+    df = tidy_pairwise_sample_combinations(samples, prefix = col_sample, include_unused_levels = include_unused_levels)
 
-                              # Calculate Jaccard similarity
-                              jaccard_similarity <- jaccard(s1traits, s2traits)
-                              set_size <- length(unique(c(s1traits, s2traits)))
+    # Create names which will be used for the column
+    names1 = paste0(col_sample, "1")
+    names2 = paste0(col_sample, "2")
 
-                              return(data.frame("jaccard" = jaccard_similarity, "set_size" = set_size))
-                            },
-                            .progress = TRUE)
+    # Compute Jaccard similarity
+    ls_jaccard <- furrr::future_map2(.x = df[[1]], .y = df[[2]],
+                              .f = function(s1, s2) {
+                                # Select traits for the given samples
+                                s1traits <- data[[col_trait]][s1 == data[[col_sample]]]
+                                s2traits <- data[[col_trait]][s2 == data[[col_sample]]]
 
-  df_jaccard = purrr::list_rbind(ls_jaccard)
+                                # Calculate Jaccard similarity
+                                jaccard_similarity <- jaccard(s1traits, s2traits)
+                                set_size <- length(unique(c(s1traits, s2traits)))
 
-  df <- cbind(df, df_jaccard)
+                                # Iterate Progress Bar
+                                return(list("jaccard" = jaccard_similarity, "set_size" = set_size))
+                              },
+                              .progress = TRUE)
 
-  return(df)
+    df_result <- do.call(rbind.data.frame, ls_jaccard)
+    data_cols <- colnames(df_result)
+    df_result[[names1]] <- df[[1]]
+    df_result[[names2]] <- df[[2]]
+    df_result <- df_result[, c(names1, names2, data_cols)]
+
+    return(df_result)
+
 }
+

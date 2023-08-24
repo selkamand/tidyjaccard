@@ -14,6 +14,12 @@
 #' @param label_leaf_only A logical value indicating whether to label only leaf nodes.
 #' @param draw_labels A logical value indicating whether to
 #' @param padding_bottom How much padding to add to the bottom of the plot (used to make space for text)
+#' @param hclust The hierarchical clustering object (class 'hclust') to visualize.
+# ... (other parameters)
+#' @param legend_position Position of the legend in the plot.
+#' @param leaf_node_size Size of the leaf nodes in the plot.
+#' @param col_classification The name of the column in the annotations dataframe that contains classification information.
+#'
 #' @return A ggraph plot object.
 #'
 #' @export
@@ -122,7 +128,6 @@ visualise_dendrogram_ggraph <- function(hclust, annotations = NULL, col_label = 
   }
 
   # Determine legend position
-
   gg <- gg + ggplot2::theme(legend.position = legend_position)
 
   return(gg)
